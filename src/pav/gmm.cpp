@@ -1,4 +1,4 @@
-/* Copyright (C) Universitat Politècnica de Catalunya, Barcelona, Spain.
+/* Copyright (C) Universitat Politï¿½cnica de Catalunya, Barcelona, Spain.
  *
  * Permission to copy, use, modify, sell and distribute this software
  * is granted provided this copyright notice appears in all copies.
@@ -8,7 +8,10 @@
  * Barcelona, November 2011
  */
 
+#include <bit>
+#include <cstdint>
 #include <fstream>
+#include <limits>
 #include "gmm.h"
 
 using namespace std;
@@ -100,7 +103,7 @@ namespace upc {
     return log_prob_x;
   }
 
-  /// \TODO Compute the logprob for the whole input data.
+  /// \DONE Compute the logprob for the whole input data.
   float GMM::logprob(const fmatrix &data) const {    
 
     if (nmix == 0 or vector_size == 0 or vector_size != data.ncol())
@@ -110,10 +113,22 @@ namespace upc {
     unsigned int n;
 
     for (n=0; n<data.nrow(); ++n) {
-      /// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+      /// \DONE Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+      lprob += gmm_logprob(data[n]);
     }    
     return lprob/n;
   }
+
+    float GMM::Q_rsqrt(float number) {
+        union {
+            float    f;
+            uint32_t i;
+        } conv = { .f = number };
+
+        conv.i  = 0x5f3759df - (conv.i >> 1);
+        conv.f *= 1.5F - (number * 0.5F * conv.f * conv.f);
+        return conv.f;
+    }
 
 
   int GMM::centroid(const upc::fmatrix &data) {
@@ -154,9 +169,11 @@ namespace upc {
     }
     for (k=0; k < nmix; ++k) {
       for (j=0; j < vector_size; ++j) {
-	mu[k][j] /= w[k]; /* sum{x w_i}/sum{w_i} */
-	inv_sigma[k][j] /= w[k]; /* sum{x^2 w_i}/sum{w_i} */
-	inv_sigma[k][j] = 1.0F/sqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]); /* 1/sigma */
+        mu[k][j] /= w[k]; /* sum{x w_i}/sum{w_i} */
+        inv_sigma[k][j] /= w[k]; /* sum{x^2 w_i}/sum{w_i} */
+
+        inv_sigma[k][j] = 1.0F/sqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]); /* 1/sigma */
+        /* inv_sigma[k][j] = Q_rsqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]); /1* 1/sigma *1/ */
       }
       w[k] /=  data.nrow();
     }
@@ -199,16 +216,25 @@ namespace upc {
   int GMM::em(const fmatrix &data, unsigned int max_it, float inc_threshold, int verbose) {
     unsigned int iteration;
     float old_prob=-1e34, new_prob=-1e34, inc_prob=-1e34;
-    
+
     fmatrix weights(data.nrow(), nmix);
     for (iteration=0; iteration<max_it; ++iteration) {
-      /// \TODO
+      /// \DONE
 	  // Complete the loop in order to perform EM, and implement the stopping criterion.
 	  //
 	  // EM loop: em_expectation + em_maximization.
 	  //
       // Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
       // increase more than inc_threshold.
+        new_prob = this->em_expectation(data, weights);
+        this->em_maximization(data, weights);
+
+        inc_prob = new_prob - old_prob;
+        if (inc_prob < inc_threshold) {
+            break;
+        }
+        old_prob = new_prob;
+
       if (verbose & 01)
 	cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
     }
