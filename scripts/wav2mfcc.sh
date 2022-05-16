@@ -42,7 +42,7 @@ sox $inputfile -t raw -e signed -b 16 - |
     $X2X +sf |
     $FRAME -l 240 -p 80 |
     $WINDOW -l 240 -L 240 |
-	$MFCC -s 8 -l 240 -m $mfcc_order > $base.mfcc
+	$MFCC -w 1 -s 8 -l 240 -m $mfcc_order > $base.mfcc
 
 # Our array files need a header with the number of cols and rows:
 ncol=$((mfcc_order)) # mfcc m =>  ( a0 a1 ... am-1) 
