@@ -19,8 +19,17 @@ db_devel=spk_8mu/speecon
 db_eval=spk_8mu/sr_test
 world=users
 
-gmm_N=10    # Iteraciones
-gmm_m=20    # Numero gausianas
+# Para inicializar la GMM se usara el threshold, por eso se escoge un número
+# tan alto de iteraciones
+verbosity=0
+gmm_threshold=0.001
+gmm_N=200    # Iteraciones
+gmm_m=30     # Numero gausianas
+
+# Init method for the GMM
+#   0: Random
+#   1: VQ (FIXME: Not working!)
+init_method=1
 
 lp_coefs=20
 lpcc_coefs=20
@@ -156,7 +165,7 @@ for cmd in $*; do
        for dir in $db_devel/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
-           gmm_train -v 0 -T 0.001 -N$gmm_N -m $gmm_m -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
+           gmm_train -v $verbosity -T gmm_threshold -N $gmm_N -m $gmm_m -i $init_method -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
            echo
        done
    elif [[ $cmd == test ]]; then
@@ -179,7 +188,7 @@ for cmd in $*; do
 	   # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
 	   #
 	   # - The name of the world model will be used by gmm_verify in the 'verify' command below.
-        gmm_train -v 0 -T 0.001 -N$gmm_N -m $gmm_m -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
+        gmm_train -v $verbosity -T gmm_threshold -N$gmm_N -m $gmm_m -i $init_method -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
        
    elif [[ $cmd == verify ]]; then
        ## @file

@@ -59,6 +59,7 @@ int main(int argc, const char *argv[]) {
     gmm.random_init(data, nmix);
     break;
   case 1:
+    gmm.vq_lbg(data, nmix, init_iterations, init_threshold, verbose);
     break;
   case 2:
     break;
