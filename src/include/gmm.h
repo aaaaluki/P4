@@ -85,11 +85,6 @@ namespace upc {
     /// Compute log10(prob)/n of the sequence of data; data[0] .... data[n-1]; n= data.size() 
     float logprob(const upc::fmatrix &data) const;
 
-    /// Compute the inverse square root of number (1/sqrt(x))
-    /// Source: https://en.wikipedia.org/wiki/Fast_inverse_square_root#Avoiding_undefined_behavior
-
-    float Q_rsqrt(float number);
-
     std::istream& read(std::istream &); ///read gmm from binary file
     std::ostream& write(std::ostream &) const; ///write gmm into binary file
     std::ostream& print(std::ostream &) const; //show gmm (text format)

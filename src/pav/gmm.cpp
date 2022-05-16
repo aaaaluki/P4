@@ -119,18 +119,6 @@ namespace upc {
     return lprob/n;
   }
 
-    float GMM::Q_rsqrt(float number) {
-        union {
-            float    f;
-            uint32_t i;
-        } conv = { .f = number };
-
-        conv.i  = 0x5f3759df - (conv.i >> 1);
-        conv.f *= 1.5F - (number * 0.5F * conv.f * conv.f);
-        return conv.f;
-    }
-
-
   int GMM::centroid(const upc::fmatrix &data) {
     if (data.nrow() == 0 or data.ncol() == 0)
       return -1;
@@ -173,7 +161,6 @@ namespace upc {
         inv_sigma[k][j] /= w[k]; /* sum{x^2 w_i}/sum{w_i} */
 
         inv_sigma[k][j] = 1.0F/sqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]); /* 1/sigma */
-        /* inv_sigma[k][j] = Q_rsqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]); /1* 1/sigma *1/ */
       }
       w[k] /=  data.nrow();
     }
