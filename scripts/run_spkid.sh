@@ -21,18 +21,19 @@ world=users
 
 # Para inicializar la GMM se usara el threshold, por eso se escoge un número
 # tan alto de iteraciones
-verbosity=0
+verbosity=255
 gmm_threshold=0.001
-gmm_N=200    # Iteraciones
-gmm_m=30     # Numero gausianas
+gmm_N=500    # Iteraciones
+gmm_m=50     # Numero gausianas
 
 # Init method for the GMM
 #   0: Random
-#   1: VQ (FIXME: Not working!)
-init_method=1
+#   1: VQ
+#   2: EM split
+init_method=2
 
 lp_coefs=20
-lpcc_coefs=20
+lpcc_coefs=16
 mfcc_coefs=20
 
 # ------------------------
@@ -114,6 +115,7 @@ compute_lp() {
 }
 
 compute_lpcc() {
+    lp_coefs=$lpcc_coefs
     db=$1
     shift
     for filename in $(sort $*); do
