@@ -23,8 +23,8 @@ world=users
 # tan alto de iteraciones
 verbosity=255
 gmm_threshold=0.001
-gmm_N=500    # Iteraciones
-gmm_m=50     # Numero gausianas
+gmm_N=64    # Iteraciones
+gmm_m=32     # Numero gausianas
 
 # Init method for the GMM
 #   0: Random
@@ -33,8 +33,9 @@ gmm_m=50     # Numero gausianas
 init_method=2
 
 lp_coefs=20
-lpcc_coefs=16
+lpcc_coefs=25
 mfcc_coefs=20
+mfcc_banks=33
 
 # ------------------------
 # Usage
@@ -133,7 +134,7 @@ compute_mfcc() {
 
         # Numero de coefs: Documento 2c "Representation of the speech signal
         # for ASR" pag. 22
-        EXEC="wav2mfcc $mfcc_coefs $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2mfcc $mfcc_coefs $mfcc_banks $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -237,8 +238,8 @@ for cmd in $*; do
        gmm_verify -d work/$FEAT -e $FEAT -D work/gmm/$FEAT -E gmm -w $world lists/final/verif.users lists/final/verif.test lists/final/verif.test.candidates |
        tee $w/verif_test.log
 
-       # UMBRAL=1.15994  # LPCC
-       UMBRAL=0.67502  # MFCC
+       UMBRAL=0.26312  # LPCC
+       # UMBRAL=0.67502  # MFCC
        perl -ane 'print "$F[0]\t$F[1]\t";
             if ($F[2] > $ENV{UMBRAL}) {print "1\n"}
             else {print "0\n"}' $w/verif_test.log | tee verif_test.log
