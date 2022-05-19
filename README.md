@@ -32,9 +32,21 @@ ejercicios indicados.
 - Analice el script `wav2lp.sh` y explique la misión de los distintos comandos involucrados en el *pipeline*
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
+    + **sox:** Transforma el fichero WAV en un stream de int16.
+    + **x2x:** Pasa de int16 a float32
+    + **frame:** Extrae frames del stream de float32, con los parametros `-l` i
+        `-p` se decide la longitud de la ventana y el desplazamiento,
+        respectivamente.
+    + **window:** Aplica un enventanado a los frames extraidos anteriormente.
+    + **lpc:** Calcula los `-m` coeficientes LPC de cada frame.
 
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
+
+  Solo se necesita saber el numero de filas i columnas para poner el header al
+  fichero fmatrix. Para ello se calculan en base al numero de coeficientes y la
+  longitud del fichero. Una vez se tienen se deben pasar de ascii a uint32 y
+  poner como cabecera del fichero.
 
   * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
     entrada y cuál es el de resultado.
@@ -42,8 +54,25 @@ ejercicios indicados.
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
 
+ ```bash
+sox $inputfile -t raw -e signed -b 16 - |
+    $X2X +sf |
+    $FRAME -l 240 -p 80 |
+    $WINDOW -l 240 -L 240 |
+	$LPC -l 240 -m $lpc_order |
+    $LPCC -m $lpc_order -M $lpcc_order > $base.lpcc
+ ```
+
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+
+```bash
+sox $inputfile -t raw -e signed -b 16 - |
+    $X2X +sf |
+    $FRAME -l 240 -p 80 |
+    $WINDOW -l 240 -L 240 |
+	$MFCC -w 1 -s 8 -l 240 -m $mfcc_order -n $mfcc_banks > $base.mfcc
+```
 
 ### Extracción de características.
 
@@ -82,6 +111,10 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+ 
+|       | LP   | LPCC | MFCC |
+|-------|:----:|:----:|:----:|
+| Error |      |      |      |
 
 ### Verificación del locutor.
 
@@ -92,6 +125,10 @@ Complete el código necesario para realizar verificación del locutor y optimice
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
  
+  |       | LP   | LPCC | MFCC |
+  |-------|:----:|:----:|:----:|
+  | score |      |      |      |
+
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
