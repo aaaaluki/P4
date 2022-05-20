@@ -27,7 +27,7 @@ spk_ver/v00/v0025	SES002	0
 spk_ver/v00/v0026	SES002	0
 spk_ver/v00/v0027	SES129	1
 spk_ver/v00/v0028	SES007	0
-spk_ver/v00/v0029	SES083	0
+spk_ver/v00/v0029	SES083	1
 spk_ver/v00/v0030	SES019	1
 spk_ver/v00/v0031	SES007	0
 spk_ver/v00/v0032	SES270	1
@@ -64,7 +64,7 @@ spk_ver/v00/v0062	SES008	0
 spk_ver/v00/v0063	SES008	0
 spk_ver/v00/v0064	SES117	1
 spk_ver/v00/v0065	SES149	1
-spk_ver/v00/v0066	SES008	0
+spk_ver/v00/v0066	SES008	1
 spk_ver/v00/v0067	SES008	0
 spk_ver/v00/v0068	SES162	1
 spk_ver/v00/v0069	SES008	0
@@ -119,7 +119,7 @@ spk_ver/v01/v0117	SES177	1
 spk_ver/v01/v0118	SES014	0
 spk_ver/v01/v0119	SES014	0
 spk_ver/v01/v0120	SES014	0
-spk_ver/v01/v0121	SES146	0
+spk_ver/v01/v0121	SES146	1
 spk_ver/v01/v0122	SES014	1
 spk_ver/v01/v0123	SES014	0
 spk_ver/v01/v0124	SES014	0
@@ -405,7 +405,7 @@ spk_ver/v04/v0403	SES085	0
 spk_ver/v04/v0404	SES180	1
 spk_ver/v04/v0405	SES129	1
 spk_ver/v04/v0406	SES085	0
-spk_ver/v04/v0407	SES146	0
+spk_ver/v04/v0407	SES146	1
 spk_ver/v04/v0408	SES085	0
 spk_ver/v04/v0409	SES085	0
 spk_ver/v04/v0410	SES085	0
@@ -583,7 +583,7 @@ spk_ver/v05/v0581	SES106	0
 spk_ver/v05/v0582	SES106	0
 spk_ver/v05/v0583	SES106	0
 spk_ver/v05/v0584	SES106	0
-spk_ver/v05/v0585	SES106	1
+spk_ver/v05/v0585	SES106	0
 spk_ver/v05/v0586	SES106	0
 spk_ver/v05/v0587	SES106	0
 spk_ver/v05/v0588	SES106	0
@@ -805,7 +805,7 @@ spk_ver/v08/v0803	SES143	0
 spk_ver/v08/v0804	SES143	0
 spk_ver/v08/v0805	SES143	0
 spk_ver/v08/v0806	SES143	0
-spk_ver/v08/v0807	SES177	0
+spk_ver/v08/v0807	SES177	1
 spk_ver/v08/v0808	SES149	1
 spk_ver/v08/v0809	SES143	0
 spk_ver/v08/v0810	SES158	1
@@ -854,7 +854,7 @@ spk_ver/v08/v0852	SES144	0
 spk_ver/v08/v0853	SES144	0
 spk_ver/v08/v0854	SES144	0
 spk_ver/v08/v0855	SES144	0
-spk_ver/v08/v0856	SES082	1
+spk_ver/v08/v0856	SES082	0
 spk_ver/v08/v0857	SES142	1
 spk_ver/v08/v0858	SES144	0
 spk_ver/v08/v0859	SES144	0
@@ -1328,7 +1328,7 @@ spk_ver/v13/v1326	SES270	1
 spk_ver/v13/v1327	SES120	1
 spk_ver/v13/v1328	SES270	0
 spk_ver/v13/v1329	SES270	0
-spk_ver/v13/v1330	SES270	1
+spk_ver/v13/v1330	SES270	0
 spk_ver/v13/v1331	SES270	0
 spk_ver/v13/v1332	SES270	0
 spk_ver/v13/v1333	SES270	0

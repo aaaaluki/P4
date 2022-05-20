@@ -17,14 +17,14 @@ w=work
 name_exp=one
 db_devel=spk_8mu/speecon
 db_eval=spk_8mu/sr_test
-world=users
+world=others
 
 # Para inicializar la GMM se usara el threshold, por eso se escoge un número
 # tan alto de iteraciones
 verbosity=255
 gmm_threshold=0.001
 gmm_N=64    # Iteraciones
-gmm_m=32     # Numero gausianas
+gmm_m=32    # Numero gausianas
 
 # Init method for the GMM
 #   0: Random
@@ -238,7 +238,7 @@ for cmd in $*; do
        gmm_verify -d work/$FEAT -e $FEAT -D work/gmm/$FEAT -E gmm -w $world lists/final/verif.users lists/final/verif.test lists/final/verif.test.candidates |
        tee $w/verif_test.log
 
-       UMBRAL=0.26312  # LPCC
+       UMBRAL=0.32076  # LPCC
        # UMBRAL=0.67502  # MFCC
        perl -ane 'print "$F[0]\t$F[1]\t";
             if ($F[2] > $ENV{UMBRAL}) {print "1\n"}
