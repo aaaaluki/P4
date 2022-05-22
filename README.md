@@ -48,8 +48,13 @@ ejercicios indicados.
   longitud del fichero. Una vez se tienen se deben pasar de ascii a uint32 y
   poner como cabecera del fichero.
 
-  * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
+  + ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
     entrada y cuál es el de resultado.
+
+    De esta manera los datos ya estan guardados como float32 y no como ascii, esto hace que no se tengan
+    que convertir cada vez que se vaya a leer el fichero. Ademas una vez obtenidos las características
+    de SPTK los cambios que se tienen que hacer a los datos són mínimos (solo añadir una cabecera),
+    cosa que hace el programa mas eficiente.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
