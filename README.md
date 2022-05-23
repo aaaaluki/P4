@@ -83,10 +83,40 @@ sox $inputfile -t raw -e signed -b 16 - |
 
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
+
+  En el eje X se encuentra el coeficiente 2 y en el eje Y el coeficiente 3.
   
-  + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
-    parametrizadas.
+  LP
+
+  ![LP](images/lp-dependance-plot.png)
+
+  LPCC
+  
+  ![LPCC](images/lpcc-dependance-plot.png)
+
+  MFCC
+  
+  ![MFCC](images/mfcc-dependance-plot.png)
+
+
+  + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las
+    señales parametrizadas.
+  
+    Hemos modificado el fichero [plot_gmm_feat.py](scripts/plot_gmm_feat.py) para que
+    no haga el plot de los contornos y cambie el título, el resultado se encuentra en
+    [plot_coefs.py](scripts/plot_coefs.py). A partir de ahí hemos indicado los
+    coeficientes a usar con los argumentos `xDim` i `yDim`, y dando los ficheros .FEAT
+    correspondientes.
+    ```bash
+    scripts/plot_coefs.py -x 2 -y 3 work/gmm/lp/SES000.gmm work/lp/BLOCK00/SES000/*
+    scripts/plot_coefs.py -x 2 -y 3 work/gmm/lpcc/SES000.gmm work/lpcc/BLOCK00/SES000/*
+    scripts/plot_coefs.py -x 2 -y 3 work/gmm/mfcc/SES000.gmm work/mfcc/BLOCK00/SES000/*
+    ```
+
   + ¿Cuál de ellas le parece que contiene más información?
+    En este caso parece qu MFCC tiene más información ya que los datos estan mas dispersos,
+    seguida de cerca por LPCC. LP es el que contiene menos información ya que es el que tiene
+    mas dependencia, se puede ver como la gráfica parece una recta.
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
