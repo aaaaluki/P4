@@ -103,14 +103,13 @@ sox $inputfile -t raw -e signed -b 16 - |
     señales parametrizadas.
   
     Hemos modificado el fichero [plot_gmm_feat.py](scripts/plot_gmm_feat.py) para que
-    no haga el plot de los contornos y cambie el título, el resultado se encuentra en
-    [plot_coefs.py](scripts/plot_coefs.py). A partir de ahí hemos indicado los
-    coeficientes a usar con los argumentos `xDim` i `yDim`, y dando los ficheros .FEAT
-    correspondientes.
+    cambie el título, el resultado se encuentra en [plot_coefs.py](scripts/plot_coefs.py).
+    A partir de ahí hemos indicado los coeficientes a usar con los argumentos `xDim` i
+    `yDim`, y dando los ficheros .FEAT correspondientes.
     ```bash
-    scripts/plot_coefs.py -x 2 -y 3 work/gmm/lp/SES000.gmm work/lp/BLOCK00/SES000/*
-    scripts/plot_coefs.py -x 2 -y 3 work/gmm/lpcc/SES000.gmm work/lpcc/BLOCK00/SES000/*
-    scripts/plot_coefs.py -x 2 -y 3 work/gmm/mfcc/SES000.gmm work/mfcc/BLOCK00/SES000/*
+    scripts/plot_coefs.py -x 2 -y 3 -p 0.001 work/gmm/lp/SES000.gmm work/lp/BLOCK00/SES000/*
+    scripts/plot_coefs.py -x 2 -y 3 -p 0.001 work/gmm/lpcc/SES000.gmm work/lpcc/BLOCK00/SES000/*
+    scripts/plot_coefs.py -x 2 -y 3 -p 0.001 work/gmm/mfcc/SES000.gmm work/mfcc/BLOCK00/SES000/*
     ```
 
   + ¿Cuál de ellas le parece que contiene más información?
@@ -121,13 +120,26 @@ sox $inputfile -t raw -e signed -b 16 - |
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
-  |                        | LP   | LPCC | MFCC |
-  |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  |                        | LP        | LPCC     | MFCC       |
+  |------------------------|:---------:|:--------:|:----------:|
+  | &rho;<sub>x</sub>[2,3] | -0.822944 | 0.185044 | -0.0797957 |
+
+  *Manera rapida de obtener los coeficientes:*
+  ```bash
+  export FEAT=lp; pearson work/$FEAT/BLOCK00/SES000/* | grep "rho\[2\]\[3\]"
+  export FEAT=lpcc; pearson work/$FEAT/BLOCK00/SES000/* | grep "rho\[2\]\[3\]"
+  export FEAT=mfcc; pearson work/$FEAT/BLOCK00/SES000/* | grep "rho\[2\]\[3\]"
+  ```
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
+    Como se puede ver LP es el que mayor correlación tiene, se puede ver gráficamente ya que
+    los puntos parecen una recta con pendiente negativo (coeficiente de correlación negativo).
+    Para LPCC y MFCC se puede ver que no estan correlados, MFCC menos que LPCC.
   
-- Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+- Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?  
+  Los parametros a escojer serian aquellos con menor correlación, es decir LPCC y MFCC.
+  Preferiblemente MFCC ya que parece tener menor correlación.
+
 
 ### Entrenamiento y visualización de los GMM.
 
@@ -135,10 +147,31 @@ Complete el código necesario para entrenar modelos GMM.
 
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
+  ![](images/mfcc-gmm000-feat000.png)
   
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+
+  **Locutor 000:** color rojo
+
+  **Locutor 001:** color azul
+  
+  _**GMM000 FEAT000**_
+  ![GMM000 FEAT000](images/mfcc-gmm000-feat000.png)
+
+  _**GMM000 FEAT001**_
+  ![GMM000 FEAT001](images/mfcc-gmm000-feat001.png)
+
+  _**GMM001 FEAT000**_
+  ![GMM001 FEAT000](images/mfcc-gmm001-feat000.png)
+
+  _**GMM001 FEAT001**_
+  ![GMM001 FEAT001](images/mfcc-gmm001-feat001.png)
+
+  En este caso los dos modelos de GMM son algo parecidos, aun así cuando se superponen las GMM con los datos
+  del otro locutor se pueden ver algunos picos movidos de sitio o marca picos donde no hay.
+  Estos dos costaria diferenciarlos pero seria posible.
 
 ### Reconocimiento del locutor.
 
@@ -147,9 +180,9 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
  
-|       | LP   | LPCC | MFCC |
-|-------|:----:|:----:|:----:|
-| Error |      |      |      |
+|       | LP    | LPCC  | MFCC  |
+|-------|:-----:|:-----:|:-----:|
+| Error | 8.28% | 0.25% | 1.40% |
 
 ### Verificación del locutor.
 
@@ -162,12 +195,21 @@ Complete el código necesario para realizar verificación del locutor y optimice
  
   |       | LP   | LPCC | MFCC |
   |-------|:----:|:----:|:----:|
-  | score |      |      |      |
+  | score | 59.3 |  3.3 | 12.4 |
+
+  | Sistema | Falsas Alarmas | Pérdidas | Score | Umbral   |
+  |---------|:--------------:|:--------:|:-----:|:--------:|
+  | LPCC    |         1/1000 |    6/250 |   3.3 | 0.320761 |
+
 
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
+
+  Ficheros finales:
+    + [class_test.log](class_test.log)
+    + [verif_test.log](verif_test.log)
 
 ### Trabajo de ampliación.
 
