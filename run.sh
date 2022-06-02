@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # 0 true, else false
-DO_FINAL=1
+DO_FINAL=0
 THRESHOLD_VARNAME="UMBRAL"
 
 # Check arguments

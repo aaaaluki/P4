@@ -106,6 +106,7 @@ sox $inputfile -t raw -e signed -b 16 - |
     cambie el título, el resultado se encuentra en [plot_coefs.py](scripts/plot_coefs.py).
     A partir de ahí hemos indicado los coeficientes a usar con los argumentos `xDim` i
     `yDim`, y dando los ficheros .FEAT correspondientes.
+
     ```bash
     scripts/plot_coefs.py -x 2 -y 3 -p 0.001 work/gmm/lp/SES000.gmm work/lp/BLOCK00/SES000/*
     scripts/plot_coefs.py -x 2 -y 3 -p 0.001 work/gmm/lpcc/SES000.gmm work/lpcc/BLOCK00/SES000/*
@@ -113,6 +114,7 @@ sox $inputfile -t raw -e signed -b 16 - |
     ```
 
   + ¿Cuál de ellas le parece que contiene más información?
+
     En este caso parece qu MFCC tiene más información ya que los datos estan mas dispersos,
     seguida de cerca por LPCC. LP es el que contiene menos información ya que es el que tiene
     mas dependencia, se puede ver como la gráfica parece una recta.
@@ -132,11 +134,13 @@ sox $inputfile -t raw -e signed -b 16 - |
   ```
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
+
     Como se puede ver LP es el que mayor correlación tiene, se puede ver gráficamente ya que
     los puntos parecen una recta con pendiente negativo (coeficiente de correlación negativo).
     Para LPCC y MFCC se puede ver que no estan correlados, MFCC menos que LPCC.
   
-- Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?  
+- Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
   Los parametros a escojer serian aquellos con menor correlación, es decir LPCC y MFCC.
   Preferiblemente MFCC ya que parece tener menor correlación.
 

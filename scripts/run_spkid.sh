@@ -32,7 +32,7 @@ gmm_m=32    # Numero gausianas
 #   2: EM split
 init_method=2
 
-lp_coefs=20
+lp_coefs=25
 lpcc_coefs=25
 mfcc_coefs=20
 mfcc_banks=33
@@ -168,7 +168,7 @@ for cmd in $*; do
        for dir in $db_devel/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
-           gmm_train -v $verbosity -T $gmm_threshold -N $gmm_N -m $gmm_m -i $init_method -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
+           gmm_train -v $verbosity -T gmm_threshold -N $gmm_N -m $gmm_m -i $init_method -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
            echo
        done
    elif [[ $cmd == test ]]; then
